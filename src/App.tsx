@@ -37,23 +37,21 @@ const App = () => {
       {isActive ? (
         <div className="flex flex-col gap-2 items-center">
           <CircularProgressbarWithChildren
+          className="[&_.CircularProgressbar-path]:stroke-amber-300 [&_.CircularProgressbar-background]:fill-amber-600"
             background
-            backgroundPadding={6}
+            backgroundPadding={8}
             styles={buildStyles({
-              strokeLinecap: "butt",
-              backgroundColor: "rgb(253 230 138)",
-              textColor: "rgb(217 119 6)",
-              pathColor: "rgb(217 119 6)",
+              strokeLinecap: "round",
               trailColor: "transparent"
             })}
             value={time.seconds}
             maxValue={60}
           >
-            <p className="text-amber-600">
-              <span className="text-8xl">{time.minutes.toString()}</span>/ {goal} min
+            <p className="text-amber-300">
+              <span className="text-8xl">{time.minutes.toString()}</span>/ {goal} 分
             </p>
           </CircularProgressbarWithChildren>
-          <button className="bg-amber-200" onClick={handleStop}>
+          <button className="bg-amber-300" onClick={handleStop}>
             Stop
           </button>
         </div>
