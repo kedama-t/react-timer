@@ -1,5 +1,6 @@
 import { ReactEventHandler, useEffect, useState } from 'react';
-import { CircularProgressbar } from 'react-circular-progressbar';
+import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
+import workerInterval from './lib/workerIntervals';
 import 'react-circular-progressbar/dist/styles.css';
 
 const App = () => {
@@ -19,8 +20,7 @@ const App = () => {
     if (!isActive) {
       return;
     }
-    const timer = setInterval(() => {
-      console.log(time);
+    const id = workerInterval.setInterval(() => {
       if (time.seconds === 0) {
         if (time.minutes === 0) {
           setIsActive(false);
@@ -31,34 +31,42 @@ const App = () => {
         setTime({ minutes: time.minutes, seconds: time.seconds - 1 });
       }
     }, 1000);
-    return () => clearInterval(timer);
+    return () => workerInterval.clearInterval(id);
   }, [time, isActive]);
 
   return (
     <>
       {isActive ? (
-        <>
-          <CircularProgressbar
-            className="w-48 h-48"
+        <div className="flex flex-col gap-2 items-center">
+          <CircularProgressbarWithChildren
             value={time.seconds}
             maxValue={60}
-            text={time.minutes.toString()}
-          />
+          >
+            <p>
+              <span className="text-8xl">{time.minutes.toString()}</span>min
+            </p>
+          </CircularProgressbarWithChildren>
           <button className="bg-slate-200" onClick={handleStop}>
             Stop
           </button>
-        </>
+        </div>
       ) : (
         <form
           className="flex flex-col gap-2 items-center"
           onSubmit={handleStart}
         >
-          <input
-            className="w-48 h-48 text-9xl"
-            type="number"
-            name="time"
-            defaultValue={90}
-          />
+
+          <CircularProgressbarWithChildren
+            value={0}
+            maxValue={60}
+            >
+            <input
+              className="w-40 h-40 text-center text-8xl inline-block"
+              type="number"
+              name="time"
+              defaultValue={90}
+            />
+          </CircularProgressbarWithChildren>
           <button className="bg-slate-200" type="submit">
             Start
           </button>
